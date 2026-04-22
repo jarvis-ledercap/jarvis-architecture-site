@@ -3,87 +3,156 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jarvis Architecture Flow</title>
+  <title>Jarvis Systems Architecture</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mint: '#00FFC3',
+            'mint-muted': '#b8fff0',
+            'line': 'rgba(0,255,195,.28)',
+            'ledercap-blue': '#1e40af', // Congruent blue accent from Drive Tailwind
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    :root{--bg:#000505;--mint:#00FFC3;--text:#fff;--red:#FF6B6B;--amber:#ffd166;--glass:rgba(0,255,195,.08)}
-    *{box-sizing:border-box} html,body{margin:0;background:#000505;color:var(--text);font-family:Inter,system-ui,sans-serif}
-    canvas#matrix{position:fixed;inset:0;z-index:0;opacity:.2}
-    .wrap{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:18px}
-    .hud{border:1px solid rgba(0,255,195,.45);border-radius:16px;background:linear-gradient(180deg,rgba(0,255,195,.12),rgba(255,255,255,.02));backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,255,195,.15),inset 0 0 18px rgba(0,255,195,.05)}
-    .hero{padding:20px 22px}.k{font-size:11px;letter-spacing:.18em;color:var(--mint);text-transform:uppercase}.hero h1{margin:.35rem 0;font-size:clamp(1.45rem,3vw,2.4rem)}
-    .hero p{margin:0;color:#bbfff1;max-width:980px}
-    .row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:12px}.c{padding:14px}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
-    h2{margin:0 0 10px;color:var(--mint);font-size:.95rem;letter-spacing:.06em;text-transform:uppercase}
-    .kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,255,195,.12);font-size:.9rem}.kv:last-child{border-bottom:0}
-    .badge{padding:3px 8px;border-radius:999px;font-size:11px;border:1px solid}.ok{color:var(--mint);border-color:rgba(0,255,195,.5);background:rgba(0,255,195,.12)}.warn{color:var(--amber);border-color:rgba(255,209,102,.5);background:rgba(255,209,102,.12)}.bad{color:var(--red);border-color:rgba(255,107,107,.5);background:rgba(255,107,107,.12)}
-    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.chip{font-size:12px;color:#9efce9;border:1px solid rgba(0,255,195,.3);padding:5px 10px;border-radius:999px;background:rgba(0,255,195,.09)}
-    .graph{height:320px;position:relative;overflow:hidden}.node{position:absolute;transform:translate(-50%,-50%);padding:7px 10px;border-radius:10px;border:1px solid rgba(0,255,195,.35);background:rgba(0,255,195,.1);font-size:12px;color:#ccfff5;box-shadow:0 0 10px rgba(0,255,195,.16)}
-    .line{position:absolute;height:1px;background:linear-gradient(90deg,rgba(0,255,195,.15),rgba(0,255,195,.6),rgba(0,255,195,.15));transform-origin:0 0}
-    ul{margin:0;padding-left:18px;line-height:1.45} li{margin:5px 0}
-    .foot{margin:12px 0 28px;color:#8cead6;font-size:12px}
-    @media (max-width:960px){.s4,.s6,.s8{grid-column:span 12}.graph{height:260px}}
+    :root{--bg:#000505;--mint:#00FFC3;--text:#fff;--muted:#b8fff0;--line:rgba(0,255,195,.28)}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:radial-gradient(circle at 70% 5%,#023c31 0,#000505 45%);color:var(--text);font-family:Inter,system-ui,sans-serif}
+    #matrix{position:fixed;inset:0;z-index:0;opacity:.14}
+    .app{position:relative;z-index:2;max-w-6xl mx-auto p-4 md:p-8}
+    .glass{ring-1 ring-line/50 rounded-2xl bg-gradient-to-b from-mint/10 to-white/5 backdrop-blur-md shadow-2xl shadow-mint/20 ring-inset ring-mint/10}
+
+    .hero{p-6 md:p-8 text-center}
+    .hero .k{font-size:11px;letter-spacing:.18em;color:var(--mint);text-transform:uppercase;margin-bottom:6px}
+    .hero .k a{color:var(--mint);text-decoration:none;border-bottom:1px solid rgba(0,255,195,.45)}
+    .hero h1{margin:0;font-size:clamp(1.5rem,3.8vw,2.6rem)}
+    .hero .sub{margin:2px 0 0;color:#d7fff7;font-size:clamp(.95rem,2.4vw,1.2rem);letter-spacing:.06em;text-transform:uppercase}
+    .hero p{margin:8px auto 0;max-width:860px;color:var(--muted)}
+
+    .layout{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px}
+    .infoPanel{display:none;padding:12px}
+    .infoTitle{font-size:.8rem;color:var(--mint);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+    .infoBody h3{margin:0 0 8px;color:#d8fff6}.infoBody p{margin:0 0 8px;color:#c2fff4;line-height:1.45}.infoBody ul{margin:0;padding-left:18px;color:#befff3}
+    .panel{padding:12px}
+    h2{margin:0 0 10px;font-size:.85rem;letter-spacing:.08em;color:var(--mint);text-transform:uppercase}
+
+    .topology .node{cursor:pointer;padding:10px;border:1px solid rgba(0,255,195,.2);border-radius:10px;background:rgba(0,255,195,.05);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+    .topology .node:hover{border-color:rgba(0,255,195,.55);box-shadow:0 0 12px rgba(0,255,195,.2)}
+    .tiny{font-size:11px;color:#9ceedd}
+
+    .health .row{display:grid;grid-template-columns:1fr auto;padding:6px 0;border-bottom:1px solid rgba(0,255,195,.12);font-size:13px}
+    .health .row:last-child{border-bottom:0}.ok{color:var(--mint)}
+
+    .main{padding:12px}
+    .main h2{text-align:center}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;justify-content:center}
+    .chip{cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px;color:var(--mint);background:rgba(0,255,195,.1)}
+
+    .map{height:450px;border:1px solid rgba(0,255,195,.24);border-radius:10px;position:relative;overflow:hidden;background:rgba(0,255,195,.03)}
+    .edge{position:absolute;height:2px;background:linear-gradient(90deg,rgba(0,255,195,.15),rgba(0,255,195,.9));transform-origin:0 0;z-index:1}
+    .dot{position:absolute;transform:translate(-50%,-50%);padding:5px 8px;border:1px solid rgba(0,255,195,.42);border-radius:8px;background:rgba(0,18,14,.9);font-size:10px;color:#d6fff6;text-align:center;line-height:1.15;min-width:84px;z-index:3;cursor:pointer}.dot:hover{box-shadow:0 0 12px rgba(0,255,195,.35);border-color:rgba(0,255,195,.7)}
+
+    .topoViz{margin-top:10px;border:1px solid rgba(0,255,195,.24);border-radius:10px;background:rgba(0,255,195,.03);padding:12px 10px;display:grid;gap:10px}
+    .layer{border-top:1px solid rgba(0,255,195,.32);padding-top:8px}
+    .layer:first-child{border-top:0;padding-top:0}
+    .layerLabel{font-size:11px;letter-spacing:.08em;color:#9df3e3;text-transform:uppercase;margin-bottom:6px}
+    .pillRow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+    .pill{padding:5px 9px;border:1px solid rgba(0,255,195,.42);border-radius:8px;background:rgba(0,255,195,.14);font-size:11px;color:#d6fff6;cursor:pointer}
+
+    .modal{position:fixed;inset:0;background:rgba(0,5,5,.88);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+    .modal.open{display:flex}
+    .popup{max-width:760px;width:100%;padding:16px;border:1px solid rgba(0,255,195,.55);border-radius:14px;background:linear-gradient(180deg,rgba(0,255,195,.32),rgba(0,12,10,.92));box-shadow:0 0 30px rgba(0,255,195,.3)}
+    .popup h3{margin:0 0 8px;color:#d8fff6}.popup p{margin:0 0 8px;color:#c2fff4;line-height:1.45}.popup ul{margin:0;padding-left:18px;color:#befff3}
+    .close{margin-top:12px;cursor:pointer;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:rgba(0,255,195,.1);color:var(--mint);display:inline-block}
+
+    @media (max-width:899px){.layout{grid-template-columns:1fr}.main{order:-1}.map{height:410px}}
+    @media (min-width:900px){body{overflow:hidden}.app{height:100vh;display:flex;flex-direction:column}.hero{padding:12px 18px;text-align:left;display:flex;align-items:center;gap:14px;justify-content:space-between}.hero p{max-width:56ch;margin:0}.layout{grid-template-columns:320px minmax(0,1fr) 320px;grid-template-areas:'detail main health';flex:1;min-height:0;align-items:stretch}.infoPanel{display:block;overflow:auto;grid-area:detail;height:100%}.main{overflow:hidden;display:flex;flex-direction:column;grid-area:main;height:100%}.map{flex:1;height:auto;min-height:320px}.topology{overflow:auto;grid-area:health;height:100%}}
   </style>
 </head>
 <body>
 <canvas id="matrix"></canvas>
-<div class="wrap">
-  <section class="hud hero">
-    <div class="k">Jarvis // Architecture Flow Map</div>
-    <h1>Jarvis System: Codebase, Memory, Routing, Channels, Redundancy</h1>
-    <p>Flat workflow map showing Jarvis system architecture, routing, memory, channels, and redundancy in a shareable standalone format.</p>
-    <div class="chips"><span class="chip">Midnight Void</span><span class="chip">Neural Mint</span><span class="chip">Glass HUD</span><span class="chip">Mobile + Web</span><span class="chip">Future deploy ready</span></div>
+<div class="app">
+  <section class="glass hero">
+    <div class="k"><a href="https://www.ledercap.com" target="_blank" rel="noopener">ledercap</a></div>
+    <h1>Jarvis</h1>
+    <div class="sub">Systems Architecture</div>
+    <p>An interactive architecture surface for understanding the AI operating stack, memory system, model routing, messaging interfaces, and resilience design.</p>
   </section>
 
-  <section class="row">
-    <article class="hud c s4"><h2>Live Status Badges</h2><div id="status"></div></article>
-    <article class="hud c s8"><h2>Architecture Constellation</h2><div class="graph" id="graph"></div></article>
+  <section class="layout">
+    <aside class="glass panel topology">
+      <h2>Live Health</h2>
+      <div class="health">
+        <div class="row"><span>Gateway</span><b class="ok">ONLINE</b></div>
+        <div class="row"><span>Telegram</span><b class="ok">CONNECTED</b></div>
+        <div class="row"><span>Google CLI</span><b class="ok">AUTHED</b></div>
+        <div class="row"><span>Vector Index</span><b class="ok">READY</b></div>
+        <div class="row"><span>GitHub Pages</span><b class="ok">LIVE</b></div>
+      </div>
 
-    <article class="hud c s6"><h2>Memory + Vector Stack</h2><ul><li>Human memory layer: MEMORY.md + daily logs</li><li>Semantic retrieval with local embeddings (nomic-embed-text)</li><li>Token-efficient snippet recall for decisions/context</li><li>QMD/OpenClaw memory integration pattern for scalable retrieval</li></ul></article>
-    <article class="hud c s6"><h2>Model Triage Layer</h2><ul><li>Default: OpenAI 5.3 Codex for heavy work</li><li>Fast fallback: xAI grok-4-1-fast</li><li>Route-aware policy: fast/default/reasoning by task type</li><li>Goal: quality under control + latency/cost discipline</li></ul></article>
+      <div class="topoViz" id="topoViz">
+        <div class="layer"><div class="layerLabel">L3 Deploy</div><div class="pillRow"><div class="pill" data-key="deploy">Deploy</div></div></div>
+        <div class="layer"><div class="layerLabel">L2 Interfaces</div><div class="pillRow"><div class="pill" data-key="channels">Channels</div><div class="pill" data-key="storage">Storage</div><div class="pill" data-key="forest">3D Forest</div></div></div>
+        <div class="layer"><div class="layerLabel">L1 Intelligence</div><div class="pillRow"><div class="pill" data-key="memory">Memory</div><div class="pill" data-key="vector">Vector</div><div class="pill" data-key="triage">AI Triage</div><div class="pill" data-key="routing">Routing</div></div></div>
+        <div class="layer"><div class="layerLabel">L0 Foundation</div><div class="pillRow"><div class="pill" data-key="core">Core</div></div></div>
+      </div>
 
-    <article class="hud c s6"><h2>Storage + Redundancy</h2><ul><li>Local canonical workspace on Mac mini</li><li>SSD mirror + Obsidian vault path for durable context</li><li>GitHub snapshots for off-device recovery + history</li><li>Backup scripts for sync/snapshot/push automation</li></ul></article>
-    <article class="hud c s6"><h2>Channels + Operations</h2><ul><li>Primary operator channel: Telegram</li><li>Google Workspace CLI integrated for Gmail/Docs/Drive</li><li>Heartbeat routines for executive brief + ongoing maintenance</li><li>Policy controls for safe external actions</li></ul></article>
+      </aside>
 
-    <article class="hud c s12"><h2>3D Memory Forest + Internal Tools</h2><ul><li>3D memory forest for navigable context map (desktop walk + XR scaffolding)</li><li>Internal dashboards pipeline: architecture cards, dependency maps, priority targets</li><li>Next extension: real-time status pulls from model routing + memory index health</li></ul></article>
+    <aside class="glass infoPanel" id="infoPanel"><div class="infoTitle">Node Detail</div><div class="infoBody" id="infoBody"><h3>Select a node</h3><p>On desktop, node details open here in-panel.</p></div></aside>
+
+    <main class="glass main">
+      <h2>Architecture Constellation</h2>
+      <div class="map" id="map"></div>
+    </main>
   </section>
-
-  <div class="foot">Standalone architecture flow map — public-safe overview of Jarvis system design.</div>
 </div>
 
+<div class="modal" id="modal"><div class="popup"><h3 id="mTitle"></h3><p id="mDesc"></p><ul id="mBullets"></ul><div class="close" id="closeBtn">Close</div></div></div>
+
 <script>
-// Matrix rain
-const c=document.getElementById('matrix'),x=c.getContext('2d');
-function rs(){c.width=innerWidth;c.height=innerHeight} rs(); addEventListener('resize',rs);
-const letters='01アカサタナハマヤラワ0123456789'; const fs=14; let cols=[];
-function initCols(){cols=Array(Math.floor(c.width/fs)).fill(0)} initCols(); addEventListener('resize',initCols);
-(function draw(){x.fillStyle='rgba(0,5,5,0.08)'; x.fillRect(0,0,c.width,c.height); x.fillStyle='#00FFC3'; x.font=fs+'px monospace';
-  cols.forEach((y,i)=>{const t=letters[Math.floor(Math.random()*letters.length)]; const px=i*fs; x.fillText(t,px,y); cols[i]=y>c.height&&Math.random()>.975?0:y+fs;});
-  requestAnimationFrame(draw);
-})();
+const cv=document.getElementById('matrix'),ctx=cv.getContext('2d'),chars='01アカサタナハマヤラ0123456789';const fs=14;let cols=[];
+function fit(){cv.width=innerWidth;cv.height=innerHeight;cols=Array(Math.floor(cv.width/fs)).fill(0)}fit();addEventListener('resize',fit);
+(function rain(){ctx.fillStyle='rgba(0,5,5,.085)';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#00FFC3';ctx.font=fs+'px monospace';cols.forEach((y,i)=>{ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*fs,y);cols[i]=y>cv.height&&Math.random()>.98?0:y+fs});requestAnimationFrame(rain)})();
 
-// Status badges (can be wired to real APIs later)
-const statusData=[
- ['Gateway','ONLINE','ok'],['Telegram','CONNECTED','ok'],['Google CLI','AUTHED','ok'],['Vector Index','READY','ok'],['3D Memory Forest','AVAILABLE','warn'],['Deployment Mode','INTERNAL','warn']
-];
-const status=document.getElementById('status');
-statusData.forEach(([k,v,cls])=>{const r=document.createElement('div');r.className='kv';r.innerHTML=`<span>${k}</span><span class="badge ${cls}">${v}</span>`;status.appendChild(r)});
-
-// Constellation graph
+const map=document.getElementById('map');
 const nodes=[
- {id:'Jarvis Core',x:50,y:48},{id:'Codebase',x:24,y:24},{id:'Memory',x:75,y:24},{id:'Vector DB',x:85,y:52},
- {id:'Model Router',x:68,y:75},{id:'Channels',x:28,y:74},{id:'3D Forest',x:12,y:52},{id:'Storage',x:44,y:85}
+ ['Channels',50,10],
+ ['Deploy',50,24],
+ ['AI Triage',24,40],['Routing',76,40],
+ ['Memory',16,56],['Vector',50,56],['Storage',84,56],
+ ['3D Forest',84,72],
+ ['Core',50,86]
 ];
-const edges=[[0,1],[0,2],[2,3],[3,4],[0,5],[0,6],[1,7],[2,7],[5,7],[4,5]];
-const g=document.getElementById('graph');
-function renderGraph(){g.innerHTML='';
- edges.forEach(([a,b])=>{const A=nodes[a],B=nodes[b];const l=document.createElement('div');l.className='line';
- const x1=A.x/100*g.clientWidth,y1=A.y/100*g.clientHeight,x2=B.x/100*g.clientWidth,y2=B.y/100*g.clientHeight;
- const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI;
- l.style.left=x1+'px';l.style.top=y1+'px';l.style.width=len+'px';l.style.transform=`rotate(${ang}deg)`;g.appendChild(l);
- });
- nodes.forEach(n=>{const d=document.createElement('div');d.className='node';d.textContent=n.id;d.style.left=n.x+'%';d.style.top=n.y+'%';g.appendChild(d);});
-}
-renderGraph(); addEventListener('resize',renderGraph);
+const edges=[[0,1],[1,2],[1,3],[2,5],[3,5],[4,5],[5,6],[4,7],[6,7],[5,8],[6,8],[4,8]];
+function draw(){map.innerHTML='';const w=map.clientWidth,h=map.clientHeight;edges.forEach(([a,b])=>{const A=nodes[a],B=nodes[b],x1=A[1]/100*w,y1=A[2]/100*h,x2=B[1]/100*w,y2=B[2]/100*h;const l=document.createElement('div');l.className='edge';const dx=x2-x1,dy=y2-y1;l.style.left=x1+'px';l.style.top=y1+'px';l.style.width=Math.hypot(dx,dy)+'px';l.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;map.appendChild(l)});const keyMap={'Channels':'channels','Deploy':'deploy','AI Triage':'triage','Routing':'routing','Memory':'memory','Vector':'vector','Storage':'storage','3D Forest':'forest','Core':'core'};
+  nodes.forEach(([label,x,y])=>{const d=document.createElement('div');d.className='dot';d.style.left=x+'%';d.style.top=y+'%';d.textContent=label;d.dataset.key=keyMap[label]||'';map.appendChild(d)})}
+draw();addEventListener('resize',draw);
+
+const detail={
+ core:{t:'Core Runtime',d:'The orchestration layer that converts chat intent into governed action.',b:['OpenClaw gateway + session control','Skill/tool orchestration with policy checks','Heartbeat and operational automation']},
+ memory:{t:'Memory Layer',d:'Long and short-horizon memory architecture for continuity.',b:['MEMORY.md for durable context','Daily memory logs for operational state','Index-first retrieval for token efficiency']},
+ vector:{t:'Vector Retrieval',d:'Semantic lookup layer for fast context grounding.',b:['Local embeddings (nomic-embed-text)','Hybrid semantic + snippet recall','Built for low-latency triage']},
+ triage:{t:'AI Model Triage',d:'Policy engine selecting model tier per task.',b:['Fast lane for routine tasks','Default lane for standard execution','Reasoning lane for complex synthesis']},
+ routing:{t:'Model Routing',d:'Task-aware model selection across quality/speed tiers.',b:['Default deep reasoning path','Fast fallback model path','Future confidence-scored router']},
+ channels:{t:'Messaging Interfaces',d:'Operator and delivery interfaces for execution.',b:['Telegram command surface','Google Workspace CLI','Cross-session coordination']},
+ storage:{t:'Storage Redundancy',d:'Resilience protocol across local and mirrored systems.',b:['Local canonical workspace','SSD/Obsidian mirror path','GitHub snapshot recovery path']},
+ forest:{t:'3D Memory Forest',d:'Spatial system visualization for architecture comprehension.',b:['Navigable memory/project topology','Desktop walk mode + XR scaffolding']},
+ deploy:{t:'Deploy Surface',d:'Public-facing architecture narrative endpoint.',b:['GitHub Pages live','Embeddable into LederCap shell']}
+};
+const modal=document.getElementById('modal'),mTitle=document.getElementById('mTitle'),mDesc=document.getElementById('mDesc'),mBullets=document.getElementById('mBullets');
+function openDetail(key){const d=detail[key];if(!d)return;const desktop=window.matchMedia('(min-width:1021px)').matches; if(desktop){const ib=document.getElementById('infoBody'); if(ib){ib.innerHTML=`<h3>${d.t}</h3><p>${d.d}</p><ul>${d.b.map(x=>`<li>${x}</li>`).join('')}</ul>`;} return;} mTitle.textContent=d.t;mDesc.textContent=d.d;mBullets.innerHTML='';d.b.forEach(x=>{const li=document.createElement('li');li.textContent=x;mBullets.appendChild(li)});modal.classList.add('open')}
+document.addEventListener('click',e=>{
+  const hit=e.target.closest('[data-key]');
+  if(hit && hit.dataset.key){ openDetail(hit.dataset.key); }
+});
+document.getElementById('closeBtn').onclick=()=>modal.classList.remove('open');
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open')});
 </script>
 </body>
 </html>
