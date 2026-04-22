@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LederCap Memory Forest</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="graph"></div>
+      <aside id="panel">
+        <div class="eyebrow">LederCap Knowledge System</div>
+        <h1 id="forestTitle">Memory Forest — 3D</h1>
+        <p class="muted">Institutional map of active roots, knowledge branches, and live research systems</p>
+        <div id="legend"></div>
+        <div class="controls">
+          <label>Executive View
+            <select id="dimensionalMode">
+              <option value="3d">3D canopy</option>
+              <option value="2d">2D executive map</option>
+            </select>
+          </label>
+          <label>View
+            <select id="viewMode">
+              <option value="all">All</option>
+              <option value="structure">Structure</option>
+              <option value="timeline">Timeline (skill progress)</option>
+              <option value="health">Health flags (stale/orphan/redundant)</option>
+            </select>
+          </label>
+          <label>Domain
+            <select id="domainFilter">
+              <option value="all">All domains</option>
+            </select>
+          </label>
+          <label>Layout
+            <select id="layoutMode">
+              <option value="executive">Executive map</option>
+              <option value="natural">Natural (dynamic)</option>
+              <option value="circle">Circle</option>
+              <option value="domain">Domain clusters</option>
+            </select>
+          </label>
+        </div>
+        <hr />
+        <div id="details">
+          <p>Click a node to inspect.</p>
+        </div>
+      </aside>
+    </div>
+
+    <script type="module" src="./main.js?v=20260311c"></script>
+  </body>
+</html>

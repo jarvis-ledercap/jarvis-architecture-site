@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jarvis Architecture</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="eyebrow">Jarvis · Executive Systems Map</div>
+        <h1>How Jarvis works</h1>
+        <p class="hero-copy">
+          A standalone architecture view of Jarvis's memory system, retrieval layer, operational runtime,
+          and output workflows.
+        </p>
+      </section>
+
+      <section class="cards">
+        <article class="card">
+          <h2>Core flow</h2>
+          <ol>
+            <li><strong>Intake</strong> — tasks, messages, files, and requests enter the system</li>
+            <li><strong>Memory</strong> — durable context is stored and organized</li>
+            <li><strong>Indexing</strong> — notes, projects, and systems are structured for retrieval</li>
+            <li><strong>Embeddings</strong> — semantic lookup makes relevant context available quickly</li>
+            <li><strong>Outputs</strong> — research, memos, decks, automations, and decisions are produced</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h2>Sources of truth</h2>
+          <ul>
+            <li>Primary knowledge vault</li>
+            <li>Canonical OpenClaw workspace</li>
+            <li>Local backup mirrors</li>
+            <li>Remote git version history</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>System domains</h2>
+          <ul>
+            <li>LederCap</li>
+            <li>Robotics</li>
+            <li>Social Capital</li>
+            <li>Nestpoint</li>
+            <li>CFA / learning systems</li>
+            <li>Infrastructure and operations</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="graph-wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Interactive View</div>
+            <h2>Architecture graph</h2>
+          </div>
+          <p>Sanitized executive graph showing the major system components and their flow relationships.</p>
+        </div>
+        <iframe class="graph-frame" src="./app/index.html?layout=executive&dim=2d&public=1" title="Jarvis architecture graph"></iframe>
+      </section>
+
+      <section class="cards bottom-grid">
+        <article class="card">
+          <h2>Runtime layer</h2>
+          <p>
+            Jarvis operates as a working assistant across research, strategy, operations, and execution.
+            The runtime layer connects memory, retrieval, external tools, and delivery surfaces.
+          </p>
+        </article>
+        <article class="card">
+          <h2>Redundancy and backup</h2>
+          <p>
+            The system is designed with local workspace backups, mirrored knowledge storage, and remote git history
+            to reduce the risk of loss and keep the operating context durable over time.
+          </p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

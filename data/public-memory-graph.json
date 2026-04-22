@@ -1,0 +1,154 @@
+{
+  "nodes": [
+    {
+      "id": "workspace",
+      "label": "Workspace Root",
+      "type": "core",
+      "domain": "general",
+      "status": "active"
+    },
+    {
+      "id": "domain_ledercap",
+      "label": "LederCap",
+      "type": "project",
+      "domain": "ledercap",
+      "status": "active"
+    },
+    {
+      "id": "domain_robotics",
+      "label": "Robotics",
+      "type": "project",
+      "domain": "robotics",
+      "status": "active"
+    },
+    {
+      "id": "domain_cfa",
+      "label": "CFA",
+      "type": "skill",
+      "domain": "cfa",
+      "status": "active"
+    },
+    {
+      "id": "domain_nestpoint",
+      "label": "Nestpoint",
+      "type": "project",
+      "domain": "nestpoint",
+      "status": "active"
+    },
+    {
+      "id": "domain_social_capital",
+      "label": "Social Capital",
+      "type": "project",
+      "domain": "social-capital",
+      "status": "active"
+    },
+    {
+      "id": "system_intake",
+      "label": "Intake",
+      "type": "ops",
+      "domain": "infrastructure",
+      "status": "active"
+    },
+    {
+      "id": "system_memory",
+      "label": "Memory",
+      "type": "memory",
+      "domain": "memory",
+      "status": "active"
+    },
+    {
+      "id": "system_indexing",
+      "label": "Indexing",
+      "type": "ops",
+      "domain": "infrastructure",
+      "status": "active"
+    },
+    {
+      "id": "system_embeddings",
+      "label": "Embeddings",
+      "type": "ops",
+      "domain": "infrastructure",
+      "status": "active"
+    },
+    {
+      "id": "system_outputs",
+      "label": "Outputs",
+      "type": "ops",
+      "domain": "infrastructure",
+      "status": "active"
+    },
+    {
+      "id": "system_infrastructure",
+      "label": "Infrastructure",
+      "type": "ops",
+      "domain": "infrastructure",
+      "status": "active"
+    }
+  ],
+  "links": [
+    {
+      "source": "workspace",
+      "target": "domain_ledercap"
+    },
+    {
+      "source": "workspace",
+      "target": "domain_robotics"
+    },
+    {
+      "source": "workspace",
+      "target": "domain_cfa"
+    },
+    {
+      "source": "workspace",
+      "target": "domain_nestpoint"
+    },
+    {
+      "source": "workspace",
+      "target": "domain_social_capital"
+    },
+    {
+      "source": "workspace",
+      "target": "system_intake"
+    },
+    {
+      "source": "workspace",
+      "target": "system_memory"
+    },
+    {
+      "source": "workspace",
+      "target": "system_indexing"
+    },
+    {
+      "source": "workspace",
+      "target": "system_embeddings"
+    },
+    {
+      "source": "workspace",
+      "target": "system_outputs"
+    },
+    {
+      "source": "workspace",
+      "target": "system_infrastructure"
+    },
+    {
+      "source": "system_intake",
+      "target": "system_memory"
+    },
+    {
+      "source": "system_memory",
+      "target": "system_indexing"
+    },
+    {
+      "source": "system_indexing",
+      "target": "system_embeddings"
+    },
+    {
+      "source": "system_embeddings",
+      "target": "system_outputs"
+    }
+  ],
+  "summary": {
+    "public": true,
+    "description": "Sanitized executive architecture graph for Jarvis"
+  }
+}
