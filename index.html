@@ -1,82 +1,89 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jarvis Architecture</title>
-    <link rel="stylesheet" href="./styles.css" />
-  </head>
-  <body>
-    <main class="page">
-      <section class="hero">
-        <div class="eyebrow">Jarvis · Executive Systems Map</div>
-        <h1>How Jarvis works</h1>
-        <p class="hero-copy">
-          A standalone architecture view of Jarvis's memory system, retrieval layer, operational runtime,
-          and output workflows.
-        </p>
-      </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jarvis Architecture Flow</title>
+  <style>
+    :root{--bg:#000505;--mint:#00FFC3;--text:#fff;--red:#FF6B6B;--amber:#ffd166;--glass:rgba(0,255,195,.08)}
+    *{box-sizing:border-box} html,body{margin:0;background:#000505;color:var(--text);font-family:Inter,system-ui,sans-serif}
+    canvas#matrix{position:fixed;inset:0;z-index:0;opacity:.2}
+    .wrap{position:relative;z-index:2;max-width:1280px;margin:0 auto;padding:18px}
+    .hud{border:1px solid rgba(0,255,195,.45);border-radius:16px;background:linear-gradient(180deg,rgba(0,255,195,.12),rgba(255,255,255,.02));backdrop-filter:blur(4px);box-shadow:0 0 20px rgba(0,255,195,.15),inset 0 0 18px rgba(0,255,195,.05)}
+    .hero{padding:20px 22px}.k{font-size:11px;letter-spacing:.18em;color:var(--mint);text-transform:uppercase}.hero h1{margin:.35rem 0;font-size:clamp(1.45rem,3vw,2.4rem)}
+    .hero p{margin:0;color:#bbfff1;max-width:980px}
+    .row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;margin-top:12px}.c{padding:14px}.s4{grid-column:span 4}.s6{grid-column:span 6}.s8{grid-column:span 8}.s12{grid-column:span 12}
+    h2{margin:0 0 10px;color:var(--mint);font-size:.95rem;letter-spacing:.06em;text-transform:uppercase}
+    .kv{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,255,195,.12);font-size:.9rem}.kv:last-child{border-bottom:0}
+    .badge{padding:3px 8px;border-radius:999px;font-size:11px;border:1px solid}.ok{color:var(--mint);border-color:rgba(0,255,195,.5);background:rgba(0,255,195,.12)}.warn{color:var(--amber);border-color:rgba(255,209,102,.5);background:rgba(255,209,102,.12)}.bad{color:var(--red);border-color:rgba(255,107,107,.5);background:rgba(255,107,107,.12)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.chip{font-size:12px;color:#9efce9;border:1px solid rgba(0,255,195,.3);padding:5px 10px;border-radius:999px;background:rgba(0,255,195,.09)}
+    .graph{height:320px;position:relative;overflow:hidden}.node{position:absolute;transform:translate(-50%,-50%);padding:7px 10px;border-radius:10px;border:1px solid rgba(0,255,195,.35);background:rgba(0,255,195,.1);font-size:12px;color:#ccfff5;box-shadow:0 0 10px rgba(0,255,195,.16)}
+    .line{position:absolute;height:1px;background:linear-gradient(90deg,rgba(0,255,195,.15),rgba(0,255,195,.6),rgba(0,255,195,.15));transform-origin:0 0}
+    ul{margin:0;padding-left:18px;line-height:1.45} li{margin:5px 0}
+    .foot{margin:12px 0 28px;color:#8cead6;font-size:12px}
+    @media (max-width:960px){.s4,.s6,.s8{grid-column:span 12}.graph{height:260px}}
+  </style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+<div class="wrap">
+  <section class="hud hero">
+    <div class="k">Jarvis // Architecture Flow Map</div>
+    <h1>Jarvis System: Codebase, Memory, Routing, Channels, Redundancy</h1>
+    <p>Flat workflow map showing Jarvis system architecture, routing, memory, channels, and redundancy in a shareable standalone format.</p>
+    <div class="chips"><span class="chip">Midnight Void</span><span class="chip">Neural Mint</span><span class="chip">Glass HUD</span><span class="chip">Mobile + Web</span><span class="chip">Future deploy ready</span></div>
+  </section>
 
-      <section class="cards">
-        <article class="card">
-          <h2>Core flow</h2>
-          <ol>
-            <li><strong>Intake</strong> — tasks, messages, files, and requests enter the system</li>
-            <li><strong>Memory</strong> — durable context is stored and organized</li>
-            <li><strong>Indexing</strong> — notes, projects, and systems are structured for retrieval</li>
-            <li><strong>Embeddings</strong> — semantic lookup makes relevant context available quickly</li>
-            <li><strong>Outputs</strong> — research, memos, decks, automations, and decisions are produced</li>
-          </ol>
-        </article>
-        <article class="card">
-          <h2>Sources of truth</h2>
-          <ul>
-            <li>Primary knowledge vault</li>
-            <li>Canonical OpenClaw workspace</li>
-            <li>Local backup mirrors</li>
-            <li>Remote git version history</li>
-          </ul>
-        </article>
-        <article class="card">
-          <h2>System domains</h2>
-          <ul>
-            <li>LederCap</li>
-            <li>Robotics</li>
-            <li>Social Capital</li>
-            <li>Nestpoint</li>
-            <li>CFA / learning systems</li>
-            <li>Infrastructure and operations</li>
-          </ul>
-        </article>
-      </section>
+  <section class="row">
+    <article class="hud c s4"><h2>Live Status Badges</h2><div id="status"></div></article>
+    <article class="hud c s8"><h2>Architecture Constellation</h2><div class="graph" id="graph"></div></article>
 
-      <section class="graph-wrap">
-        <div class="section-head">
-          <div>
-            <div class="eyebrow">Interactive View</div>
-            <h2>Architecture graph</h2>
-          </div>
-          <p>Sanitized executive graph showing the major system components and their flow relationships.</p>
-        </div>
-        <iframe class="graph-frame" src="./app/index.html?layout=executive&dim=2d&public=1" title="Jarvis architecture graph"></iframe>
-      </section>
+    <article class="hud c s6"><h2>Memory + Vector Stack</h2><ul><li>Human memory layer: MEMORY.md + daily logs</li><li>Semantic retrieval with local embeddings (nomic-embed-text)</li><li>Token-efficient snippet recall for decisions/context</li><li>QMD/OpenClaw memory integration pattern for scalable retrieval</li></ul></article>
+    <article class="hud c s6"><h2>Model Triage Layer</h2><ul><li>Default: OpenAI 5.3 Codex for heavy work</li><li>Fast fallback: xAI grok-4-1-fast</li><li>Route-aware policy: fast/default/reasoning by task type</li><li>Goal: quality under control + latency/cost discipline</li></ul></article>
 
-      <section class="cards bottom-grid">
-        <article class="card">
-          <h2>Runtime layer</h2>
-          <p>
-            Jarvis operates as a working assistant across research, strategy, operations, and execution.
-            The runtime layer connects memory, retrieval, external tools, and delivery surfaces.
-          </p>
-        </article>
-        <article class="card">
-          <h2>Redundancy and backup</h2>
-          <p>
-            The system is designed with local workspace backups, mirrored knowledge storage, and remote git history
-            to reduce the risk of loss and keep the operating context durable over time.
-          </p>
-        </article>
-      </section>
-    </main>
-  </body>
+    <article class="hud c s6"><h2>Storage + Redundancy</h2><ul><li>Local canonical workspace on Mac mini</li><li>SSD mirror + Obsidian vault path for durable context</li><li>GitHub snapshots for off-device recovery + history</li><li>Backup scripts for sync/snapshot/push automation</li></ul></article>
+    <article class="hud c s6"><h2>Channels + Operations</h2><ul><li>Primary operator channel: Telegram</li><li>Google Workspace CLI integrated for Gmail/Docs/Drive</li><li>Heartbeat routines for executive brief + ongoing maintenance</li><li>Policy controls for safe external actions</li></ul></article>
+
+    <article class="hud c s12"><h2>3D Memory Forest + Internal Tools</h2><ul><li>3D memory forest for navigable context map (desktop walk + XR scaffolding)</li><li>Internal dashboards pipeline: architecture cards, dependency maps, priority targets</li><li>Next extension: real-time status pulls from model routing + memory index health</li></ul></article>
+  </section>
+
+  <div class="foot">Standalone architecture flow map — public-safe overview of Jarvis system design.</div>
+</div>
+
+<script>
+// Matrix rain
+const c=document.getElementById('matrix'),x=c.getContext('2d');
+function rs(){c.width=innerWidth;c.height=innerHeight} rs(); addEventListener('resize',rs);
+const letters='01アカサタナハマヤラワ0123456789'; const fs=14; let cols=[];
+function initCols(){cols=Array(Math.floor(c.width/fs)).fill(0)} initCols(); addEventListener('resize',initCols);
+(function draw(){x.fillStyle='rgba(0,5,5,0.08)'; x.fillRect(0,0,c.width,c.height); x.fillStyle='#00FFC3'; x.font=fs+'px monospace';
+  cols.forEach((y,i)=>{const t=letters[Math.floor(Math.random()*letters.length)]; const px=i*fs; x.fillText(t,px,y); cols[i]=y>c.height&&Math.random()>.975?0:y+fs;});
+  requestAnimationFrame(draw);
+})();
+
+// Status badges (can be wired to real APIs later)
+const statusData=[
+ ['Gateway','ONLINE','ok'],['Telegram','CONNECTED','ok'],['Google CLI','AUTHED','ok'],['Vector Index','READY','ok'],['3D Memory Forest','AVAILABLE','warn'],['Deployment Mode','INTERNAL','warn']
+];
+const status=document.getElementById('status');
+statusData.forEach(([k,v,cls])=>{const r=document.createElement('div');r.className='kv';r.innerHTML=`<span>${k}</span><span class="badge ${cls}">${v}</span>`;status.appendChild(r)});
+
+// Constellation graph
+const nodes=[
+ {id:'Jarvis Core',x:50,y:48},{id:'Codebase',x:24,y:24},{id:'Memory',x:75,y:24},{id:'Vector DB',x:85,y:52},
+ {id:'Model Router',x:68,y:75},{id:'Channels',x:28,y:74},{id:'3D Forest',x:12,y:52},{id:'Storage',x:44,y:85}
+];
+const edges=[[0,1],[0,2],[2,3],[3,4],[0,5],[0,6],[1,7],[2,7],[5,7],[4,5]];
+const g=document.getElementById('graph');
+function renderGraph(){g.innerHTML='';
+ edges.forEach(([a,b])=>{const A=nodes[a],B=nodes[b];const l=document.createElement('div');l.className='line';
+ const x1=A.x/100*g.clientWidth,y1=A.y/100*g.clientHeight,x2=B.x/100*g.clientWidth,y2=B.y/100*g.clientHeight;
+ const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI;
+ l.style.left=x1+'px';l.style.top=y1+'px';l.style.width=len+'px';l.style.transform=`rotate(${ang}deg)`;g.appendChild(l);
+ });
+ nodes.forEach(n=>{const d=document.createElement('div');d.className='node';d.textContent=n.id;d.style.left=n.x+'%';d.style.top=n.y+'%';g.appendChild(d);});
+}
+renderGraph(); addEventListener('resize',renderGraph);
+</script>
+</body>
 </html>
